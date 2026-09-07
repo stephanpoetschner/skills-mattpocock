@@ -59,4 +59,15 @@ for DEST in "${DESTS[@]}"; do
     ln -sfn "$src" "$target"
     echo "linked $name -> $src ($DEST)"
   done
+
+  # Local deviation from upstream: this repo's `code-review` shadows the
+  # harness built-in of the same name, which hunts correctness bugs and takes
+  # effort levels. Both are wanted, so install this one under a name that says
+  # what it checks. Directory name wins over the SKILL.md `name:` field, so no
+  # edit to the skill itself is needed.
+  if [ -L "$DEST/code-review" ]; then
+    ln -sfn "$(readlink "$DEST/code-review")" "$DEST/spec-review"
+    rm "$DEST/code-review"
+    echo "renamed code-review -> spec-review ($DEST)"
+  fi
 done
